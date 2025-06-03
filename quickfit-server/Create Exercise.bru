@@ -1,0 +1,21 @@
+meta {
+  name: Create Exercise
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/exercises
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Bench Press",
+    "description": "Standard push ups for upper body strength",
+    "repetitions": 5,
+    "sets": 3,
+    "id": 4
+  }
+}

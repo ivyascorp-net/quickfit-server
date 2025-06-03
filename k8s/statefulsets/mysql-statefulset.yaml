@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-storage-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/ivyas/quickfit/mysql-db"
+  persistentVolumeReclaimPolicy: Retain   
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+ 
+  
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: "mysql"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpassword
+        - name: MYSQL_DATABASE
+          value: quickfit
+        volumeMounts:
+        - name: mysql-storage-pv
+          mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-storage-pv
+          persistentVolumeClaim:
+            claimName: mysql-pvc
