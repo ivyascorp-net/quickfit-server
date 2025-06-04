@@ -6,6 +6,7 @@ require gorm.io/gorm v1.30.0
 
 require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 )
 

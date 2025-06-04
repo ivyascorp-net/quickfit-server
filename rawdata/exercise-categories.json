@@ -1,0 +1,51 @@
+[
+  {
+    "id": "855c2f10-9029-4175-9342-76f24f8a9a6c",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "cardio"
+  },
+  {
+    "id": "87c9b555-68e4-4d60-9798-945bf1b666f2",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "olympic weightlifting"
+  },
+  {
+    "id": "da341d30-38cf-4904-8411-69913a4eccb9",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "strength"
+  },
+  {
+    "id": "e66b03ee-af68-4089-b3b2-a84246bd2dc8",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "stretching"
+  },
+  {
+    "id": "45eea941-f013-4f61-9e54-2912cc3717d0",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "plyometrics"
+  },
+  {
+    "id": "ce908fa5-4ec1-463d-9565-ffabcc970bfa",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "strongman"
+  },
+  {
+    "id": "e15e8b0b-3ec6-4687-a2ef-d174a27b4068",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "powerlifting"
+  }
+]

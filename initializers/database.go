@@ -21,9 +21,10 @@ func ConnectDatabase() {
 
 func MigrateDatabase() {
 	err := DB.AutoMigrate(
-		&models.Exercise{},
-		&models.Workout{},
-		&models.WorkoutExercise{},
+		models.Muscle{},
+		models.ExerciseCategory{},
+		models.Equipment{},
+		models.Exercise{},
 	)
 	if err != nil {
 		panic("Failed to migrate database")

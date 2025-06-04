@@ -1,0 +1,121 @@
+[
+  {
+    "id": "636ac8ea-721d-4f0d-b653-9201d081b2d5",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "triceps"
+  },
+  {
+    "id": "3f44fc94-c960-4e37-9560-ce3f01af12ac",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "traps"
+  },
+  {
+    "id": "1e2ca87b-784c-450b-92e7-fad773f73c0d",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "neck"
+  },
+  {
+    "id": "95dbe462-62c2-4010-b2e1-77a343bfab05",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "abdominals"
+  },
+  {
+    "id": "6243b5a9-49b1-442b-93d0-3cc4d5a7beca",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "glutes"
+  },
+  {
+    "id": "4380663d-3cd4-41f4-bf0b-3f84e980df69",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "abductors"
+  },
+  {
+    "id": "391e4f92-7c29-42de-8279-99b9db29f331",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "middle back"
+  },
+  {
+    "id": "66aa0751-3d07-4f56-ae04-facfd8e7b771",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "hamstrings"
+  },
+  {
+    "id": "b3361599-13d0-47ff-9733-e75512f5cd2d",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "shoulders"
+  },
+  {
+    "id": "bec5f4b6-79d3-4473-b6b1-04564cac0e3a",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "forearms"
+  },
+  {
+    "id": "eab70db2-7ee7-4bd0-9b65-709e14714ff0",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "lower back"
+  },
+  {
+    "id": "c3c2088c-040f-4fd3-afb3-844605fe096f",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "adductors"
+  },
+  {
+    "id": "c10ca3cb-2e64-4d10-853f-a1adc10d6d7f",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "quadriceps"
+  },
+  {
+    "id": "92a4e6bb-9909-43db-84c3-a75b0a9949b1",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "chest"
+  },
+  {
+    "id": "f1ff8377-2473-4bfc-ac00-5fe724b3cf15",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "lats"
+  },
+  {
+    "id": "e99aede1-e2e7-4ca7-abb2-eb864d6e055b",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "calves"
+  },
+  {
+    "id": "830b3e49-6633-4f34-9941-67694a043352",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "biceps"
+  }
+]

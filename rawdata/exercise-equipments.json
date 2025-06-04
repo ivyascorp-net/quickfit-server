@@ -1,0 +1,93 @@
+[
+  {
+    "id": "c05a2da7-0151-49ea-8c52-8d173c24d79e",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "other"
+  },
+  {
+    "id": "b02aec92-9013-4d87-bf3b-04972e5f9304",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "foam roll"
+  },
+  {
+    "id": "0640fc4c-1c36-4f65-96fa-dc20fa2d0c01",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": ""
+  },
+  {
+    "id": "5cd105a4-b89b-459c-911f-f4b96cbd18ac",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "cable"
+  },
+  {
+    "id": "09d5f1dc-5216-42cc-bb38-069f5ae128d2",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "barbell"
+  },
+  {
+    "id": "b8f7323c-ebc5-464e-b3ba-b19ba9223f1e",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "medicine ball"
+  },
+  {
+    "id": "69de0f8d-b7aa-4d40-abc5-19ccabafb4a5",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "body only"
+  },
+  {
+    "id": "8a91c15d-3d24-47d4-9ca3-ddf77d6dd20b",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "machine"
+  },
+  {
+    "id": "6c1c98af-5729-40bb-9245-70ef3e28feb8",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "bands"
+  },
+  {
+    "id": "942ecb98-8dbb-4d8b-9a3e-1a9c3532c8a3",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "exercise ball"
+  },
+  {
+    "id": "c99b06e8-5256-4017-9ab8-3eaf66eccb10",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "e-z curl bar"
+  },
+  {
+    "id": "76ca5942-d4d0-44a1-997f-8f129a4fa45d",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "kettlebells"
+  },
+  {
+    "id": "e1d08316-cb1c-4307-9150-a4df0db3e74f",
+    "CreatedAt": "0001-01-01T00:00:00Z",
+    "UpdatedAt": "0001-01-01T00:00:00Z",
+    "DeletedAt": null,
+    "name": "dumbbell"
+  }
+]

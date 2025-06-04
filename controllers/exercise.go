@@ -19,7 +19,7 @@ func CreateExercise(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
 	}
 
-	if exercise.ID == 0 {
+	if exercise.ID.String() != ""  {
 		log.Printf("[WARN] Exercise ID is missing")
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Exercise ID is required"})
 	}

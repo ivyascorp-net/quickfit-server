@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
+	"os"
 	"quickfit-server/initializers"
 	"quickfit-server/models"
 )
@@ -10,88 +12,101 @@ func main() {
 	initializers.ConnectDatabase()
 	initializers.MigrateDatabase() // Always migrate to ensure tables exist
 
-	// Truncate tables safely (including new normalized tables)
-	tables := []string{"workout_exercises", "exercises", "workouts", "equipment", "exercise_categories", "exercise_equipments"}
-	initializers.DB.Exec("SET FOREIGN_KEY_CHECKS = 0;")
-	for _, table := range tables {
-		if err := initializers.DB.Exec("TRUNCATE TABLE " + table + ";").Error; err != nil {
-			log.Printf("[WARN] Could not truncate table %s: %v", table, err)
-		}
-	}
-	initializers.DB.Exec("SET FOREIGN_KEY_CHECKS = 1;")
+	// Clean tables before seeding to avoid duplicate primary key errors
+	initializers.DB.Exec("DELETE FROM muscles")
+	initializers.DB.Exec("DELETE FROM exercise_categories")
+	initializers.DB.Exec("DELETE FROM equipment")
+	initializers.DB.Exec("DELETE FROM exercises")
 
 	// Seed categories
-	category := models.ExerciseCategory{Name: "Strength"}
-	if err := initializers.DB.Create(&category).Error; err != nil {
-		log.Fatalf("[ERROR] Failed to seed category: %v", err)
+	muscle, err := fetchMusclesRawData("/home/ivyas/ivayscorp-net/quickfit/quickfit-server/rawdata/muscles.json")
+	if err != nil {
+		log.Println("error loading file", err)
 	}
 
+	if err := initializers.DB.CreateInBatches(muscle, 10).Error; err != nil {
+		log.Println("[ERROR] Failed to seed muscle: ", err)
+	}
+
+	exerciseCategories, err := fetchExerciseCategoriesRawData("/home/ivyas/ivayscorp-net/quickfit/quickfit-server/rawdata/exercise-categories.json")
+	if err != nil {
+		log.Println("error loading file", err)
+	}
+	if err := initializers.DB.CreateInBatches(exerciseCategories, 10).Error; err != nil {
+		log.Fatalf("[ERROR] Failed to seed muscle: %v", err)
+	}
 	// Seed equipment
-	equipment := []models.Equipment{
-		{Name: "Bodyweight"},
-		{Name: "Mat"},
+	equipment, err := fetchEquipmentRawData("/home/ivyas/ivayscorp-net/quickfit/quickfit-server/rawdata/exercise-equipments.json")
+	if err != nil {
+		log.Println("error loading file", err)
 	}
-	for i := range equipment {
-		if err := initializers.DB.Create(&equipment[i]).Error; err != nil {
-			log.Fatalf("[ERROR] Failed to seed equipment %s: %v", equipment[i].Name, err)
-		}
+	if err := initializers.DB.CreateInBatches(equipment, 10).Error; err != nil {
+		log.Fatalf("[ERROR] Failed to seed equipment: %v", err)
 	}
 
-	// Seed exercises with relations
-	exercises := []models.Exercise{
-		{
-			Name:        "Push Ups",
-			Description: "Standard push ups",
-			Repetitions: 15,
-			Sets:        3,
-			CategoryID:  &category.ID,
-			Equipment:   []models.Equipment{equipment[0]},
-		},
-		{
-			Name:        "Plank",
-			Description: "Core strength hold",
-			Repetitions: 1,
-			Sets:        3,
-			CategoryID:  &category.ID,
-			Equipment:   []models.Equipment{equipment[1]},
-		},
+	// Seed exercises
+	exercises, err := fetchExercisesRawData("/home/ivyas/ivayscorp-net/quickfit/quickfit-server/rawdata/exercises.json")
+	if err != nil {
+		log.Println("error loading file", err)
 	}
-	for i := range exercises {
-		if err := initializers.DB.Create(&exercises[i]).Error; err != nil {
-			log.Fatalf("[ERROR] Failed to seed exercise %s: %v", exercises[i].Name, err)
-		}
-	}
-
-	// Seed workouts
-	workout := models.Workout{
-		Name:     "Morning Routine",
-		Duration: 45,
-		Notes:    "Full body warmup",
-	}
-	if err := initializers.DB.Create(&workout).Error; err != nil {
-		log.Fatalf("[ERROR] Failed to seed workout: %v", err)
-	}
-
-	// Link exercises to workout via WorkoutExercise
-	links := []models.WorkoutExercise{
-		{
-			WorkoutID:   workout.ID,
-			ExerciseID:  exercises[0].ID,
-			Repetitions: 15,
-			Sets:        3,
-		},
-		{
-			WorkoutID:   workout.ID,
-			ExerciseID:  exercises[1].ID,
-			Repetitions: 1,
-			Sets:        3,
-		},
-	}
-	for i := range links {
-		if err := initializers.DB.Create(&links[i]).Error; err != nil {
-			log.Fatalf("[ERROR] Failed to link exercise %d to workout: %v", links[i].ExerciseID, err)
-		}
+	if err := initializers.DB.CreateInBatches(exercises, 10).Error; err != nil {
+		log.Fatalf("[ERROR] Failed to seed exercises: %v", err)
 	}
 
 	log.Println("Database reseeded!")
+}
+
+func fetchMusclesRawData(filename string) (data []models.Muscle, err error) {
+
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		return data, err
+	}
+
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, err
+
+}
+func fetchExerciseCategoriesRawData(filename string) (data []models.ExerciseCategory, err error) {
+	file, err := os.ReadFile(filename)
+
+	if err != nil {
+		return data, err
+	}
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, err
+
+}
+func fetchEquipmentRawData(filename string) (data []models.Equipment, err error) {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		return data, err
+	}
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		return data, err
+	}
+	return data, err
+
+}
+
+func fetchExercisesRawData(filename string) (data []models.Exercise, err error) {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		return data, err
+	}
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		return data, err
+	}
+	return data, err
+
 }

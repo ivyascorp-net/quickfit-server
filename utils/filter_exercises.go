@@ -2,126 +2,210 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
+	"quickfit-server/models"
+	"strings"
+
+	"github.com/google/uuid"
 )
 
-type WgerTranslation struct {
-	Model  string `json:"model"`
-	Pk     int    `json:"pk"`
-	Fields struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Exercise    int    `json:"exercise"`
-		UUID        string `json:"uuid"`
-		Language    int    `json:"language"`
-	} `json:"fields"`
-}
-
-type WgerExercise struct {
-	Model  string `json:"model"`
-	Pk     int    `json:"pk"`
-	Fields struct {
-		LicenseAuthor string `json:"license_author"`
-		Category      int    `json:"category"`
-		Created       string `json:"created"`
-		LastUpdate    string `json:"last_update"`
-		Equipment     []int  `json:"equipment"`
-		UUID          string `json:"uuid"`
-	} `json:"fields"`
-}
-
-type MyExercise struct {
-	ID           int    `json:"id"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	CategoryID   int    `json:"category_id"`
-	EquipmentIDs []int  `json:"equipment_ids"`
-	Author       string `json:"author"`
-	CreatedAt    string `json:"created_at"`
-	UpdatedAt    string `json:"updated_at"`
-	Status       string `json:"status"`
-	Tags         string `json:"tags"`
-	Repetitions  *int   `json:"repetitions"`
-	Sets         *int   `json:"sets"`
+type FreeExercise struct {
+	Name             string   `json:"name"`
+	Force            string   `json:"force"`
+	Level            string   `json:"level"`
+	Mechanic         string   `json:"mechanic"`
+	Equipment        string   `json:"equipment"`
+	PrimaryMuscles   []string `json:"primaryMuscles"`
+	SecondaryMuscles []string `json:"secondaryMuscles"`
+	Instructions     []string `json:"instructions"`
+	Category         string   `json:"category"`
+	Images           []string `json:"images"`
+	ID               string   `json:"id"`
 }
 
 func main() {
-	data, err := os.ReadFile("rawdata/exercise-base-data.json")
+	rawFile, err := os.ReadFile("/home/ivyas/ivayscorp-net/free-exercise-db/dist/exercises.json")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Error reading raw exercises.json file, %v", err)
 	}
-	var raw []map[string]interface{}
-	if err := json.Unmarshal(data, &raw); err != nil {
-		log.Fatal(err)
+	fex := []FreeExercise{}
+	err = json.Unmarshal(rawFile, &fex)
+	if err != nil {
+		log.Fatal("error loading file in go struct", err)
+	}
+	filteredEuipment := buildEquipmentMap(fex)
+	writeFilteredExercises("exercise-equipments", filteredEuipment)
+	filteredCategories := buildExerciseCategories(fex)
+	writeFilteredExercises("exercise-categories", filteredCategories)
+	filteredMuscles := buildMuscles(fex)
+	writeFilteredExercises("muscles", filteredMuscles)
+	filteredExercises := buildExercise(fex, filteredMuscles, filteredCategories, filteredEuipment)
+	writeFilteredExercises("exercises", filteredExercises)
+}
+
+func buildEquipmentMap(rawEx []FreeExercise) (filteredEquipments []models.Equipment) {
+
+	ex := map[string]uuid.UUID{}
+
+	for _, v := range rawEx {
+
+		if _, ok := ex[v.Equipment]; !ok {
+
+			ex[v.Equipment] = uuid.New()
+
+		}
+
 	}
 
-	// Load translations for names and descriptions
-	transData, err := os.ReadFile("rawdata/translation.json")
-	if err != nil {
-		log.Fatal(err)
+	for k, v := range ex {
+		eq := models.Equipment{
+			Base: models.Base{ID: v},
+			Name: k,
+		}
+		filteredEquipments = append(filteredEquipments, eq)
+
 	}
-	var transRaw []WgerTranslation
-	if err := json.Unmarshal(transData, &transRaw); err != nil {
-		log.Fatal(err)
+
+	return filteredEquipments
+
+}
+
+func buildExerciseCategories(rawEX []FreeExercise) (filteredCategories []models.ExerciseCategory) {
+	categoryMap := map[string]uuid.UUID{}
+
+	for _, v := range rawEX {
+
+		if _, ok := categoryMap[v.Category]; !ok {
+			categoryMap[v.Category] = uuid.New()
+		}
+
 	}
-	// Build a map: uuid -> English translation (language=2), fallback to any language if not found
-	type transInfo struct {
-		Name        string
-		Description string
+
+	for k, v := range categoryMap {
+		fc := models.ExerciseCategory{
+			Base: models.Base{ID: v},
+			Name: k,
+		}
+		filteredCategories = append(filteredCategories, fc)
+
 	}
-	transMap := make(map[string]transInfo)
-	fallbackMap := make(map[string]transInfo)
-	for _, t := range transRaw {
-		if t.Model == "exercises.translation" && t.Fields.Name != "" && t.Fields.UUID != "" {
-			if t.Fields.Language == 2 {
-				transMap[t.Fields.UUID] = transInfo{t.Fields.Name, t.Fields.Description}
-			} else if _, exists := fallbackMap[t.Fields.UUID]; !exists {
-				fallbackMap[t.Fields.UUID] = transInfo{t.Fields.Name, t.Fields.Description}
+
+	return filteredCategories
+}
+
+func buildMuscles(rawEX []FreeExercise) (filteredMuscles []models.Muscle) {
+
+	muscleMap := map[string]uuid.UUID{}
+
+	for _, v := range rawEX {
+		for _, pm := range v.PrimaryMuscles {
+
+			if _, ok := muscleMap[pm]; !ok {
+
+				muscleMap[pm] = uuid.New()
+			}
+
+		}
+		for _, sm := range v.SecondaryMuscles {
+
+			if _, ok := muscleMap[sm]; !ok {
+
+				muscleMap[sm] = uuid.New()
+			}
+
+		}
+	}
+	for k, v := range muscleMap {
+		m := models.Muscle{
+			Base: models.Base{ID: v},
+			Name: k,
+		}
+		filteredMuscles = append(filteredMuscles, m)
+	}
+
+	return filteredMuscles
+
+}
+
+func getMuscleID(pm []string, filteredMuscles []models.Muscle) (muscleID []uuid.UUID) {
+	for _, muscle := range filteredMuscles {
+		for _, m := range pm {
+			if muscle.Name == m {
+				muscleID = append(muscleID, muscle.ID)
 			}
 		}
 	}
+	return muscleID
+}
+func getCategoryID(category string, filteredCategories []models.ExerciseCategory) (categoryID uuid.UUID) {
+	for _, cat := range filteredCategories {
+		if cat.Name == category {
+			categoryID = cat.ID
+			return categoryID
+		}
+	}
+	return uuid.Nil // Return zero UUID if not found
+}
+func getEquipmentID(equipment string, filteredEquipments []models.Equipment) (equipmentID uuid.UUID) {
+	for _, eq := range filteredEquipments {
+		if eq.Name == equipment {
+			equipmentID = eq.ID
+			return equipmentID
+		}
+	}
+	return uuid.Nil // Return zero UUID if not found
+}
 
-	var out []MyExercise
-	for _, entry := range raw {
-		if entry["model"] == "exercises.exercise" {
-			var w WgerExercise
-			b, _ := json.Marshal(entry)
-			if err := json.Unmarshal(b, &w); err != nil {
+func buildExercise(rawEx []FreeExercise, filteredMuscles []models.Muscle, filteredCategories []models.ExerciseCategory, filteredEquipments []models.Equipment) (filteredExercises []models.Exercise) {
+
+	for _, v := range rawEx {
+		primaryMuscleIDs := getMuscleID(v.PrimaryMuscles, filteredMuscles)
+		secondaryMuscleIDs := getMuscleID(v.SecondaryMuscles, filteredMuscles)
+		pm := []string{}
+		sm := []string{}
+		log.Println("Primary Muscles:", len(primaryMuscleIDs))
+		log.Println("Secondary Muscles:", len(secondaryMuscleIDs))
+		for _, v := range primaryMuscleIDs {
+			if v == uuid.Nil {
 				continue
 			}
-			tr, ok := transMap[w.Fields.UUID]
-			if !ok {
-				tr, ok = fallbackMap[w.Fields.UUID]
-			}
-			if !ok || tr.Name == "" {
-				continue // skip exercises with no name
-			}
-			out = append(out, MyExercise{
-				ID:           w.Pk,
-				Name:         tr.Name,
-				Description:  tr.Description,
-				CategoryID:   w.Fields.Category,
-				EquipmentIDs: w.Fields.Equipment,
-				Author:       w.Fields.LicenseAuthor,
-				CreatedAt:    w.Fields.Created,
-				UpdatedAt:    w.Fields.LastUpdate,
-				Status:       "active",
-				Tags:         "",
-				Repetitions:  nil,
-				Sets:         nil,
-			})
+			pm = append(pm, v.String())
+
 		}
+		for _, v := range secondaryMuscleIDs {
+			if v == uuid.Nil {
+				continue
+			}
+			sm = append(sm, v.String())
+		}
+		ex := models.Exercise{
+			Base:             models.Base{ID: uuid.New()},
+			Name:             v.Name,
+			Force:            v.Force,
+			Difficulty:       v.Level,
+			Mechanic:         v.Mechanic,
+			EquipmentID:      getEquipmentID(v.Equipment, filteredEquipments).String(),
+			PrimaryMuscles:   strings.Join(pm, ","),
+			SecondaryMuscles: strings.Join(sm, ","),
+			Instructions:     strings.Join(v.Instructions, ","),
+			Images:           strings.Join(v.Images, ","),
+			CategoryID:       getCategoryID(v.Category, filteredCategories).String(),
+		}
+		filteredExercises = append(filteredExercises, ex)
 	}
-	if len(out) == 0 {
-		log.Println("No exercises matched. Check translation and exercise UUIDs.")
-	}
-	outData, err := json.MarshalIndent(out, "", "  ")
+
+	return filteredExercises
+}
+
+func writeFilteredExercises(fileName string, filtered any) {
+	outData, err := json.MarshalIndent(filtered, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := os.WriteFile("rawdata/exercises-filtered.json", outData, 0644); err != nil {
+	if err := os.WriteFile(fmt.Sprintf("/home/ivyas/ivayscorp-net/quickfit/quickfit-server/rawdata/%s.json", fileName), outData, 0644); err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Filtered %d exercises written to rawdata/exercises-filtered.json", len(out))
+	log.Printf("Filtered strength exercises written to %s.json", fileName)
 }
